@@ -364,10 +364,10 @@ class SwitchType(ComplexType):
     def __init__(self, name, elt, *parents):
         ComplexType.__init__(self, name, elt)
         self.parents = parents
-        # FIXME: switch cannot store lenfields, so it should just delegate the parents
+        # FIXME: switch cannot store lenfields, so it should just delegate to the parents.
         self.lenfield_parent = list(parents) + [self]
-        # self.fields contains all possible fields collected from the Bitcase objects, 
-        # whereas self.items contains the Bitcase objects themselves
+        # self.fields contains all possible fields collected from the Bitcase objects,
+        # whereas self.bitcases contains the Bitcase objects themselves.
         self.bitcases = []
 
         self.is_switch = True
@@ -377,12 +377,11 @@ class SwitchType(ComplexType):
     def resolve(self, module):
         if self.resolved:
             return
-#        pads = 0
 
         parents = list(self.parents) + [self]
 
         # Resolve all of our field datatypes.
-        for index, child in enumerate(list(self.elt)):
+        for (index, child) in enumerate(list(self.elt)):
             if child.tag == 'bitcase':
                 field_name = child.get('name')
                 if field_name is None:
@@ -390,20 +389,19 @@ class SwitchType(ComplexType):
                 else:
                     field_type = self.name + (field_name,)
 
-                # use self.parent to indicate anchestor, 
-                # as switch does not contain named fields itself
+                # Use self.parents to indicate ancestors,
+                # as switch does not contain named fields itself.
                 type = BitcaseType(index, field_type, child, *parents)
-                # construct the switch type name from the parent type and the field name
+                # Construct the switch type name from the parent type and the field name.
                 if field_name is None:
                     type.has_name = False
-                    # Get the full type name for the field
-                    field_type = type.name               
-                visible = True
+                    # Get the full type name for the field.
+                    field_type = type.name
 
-                # add the field to ourself
-                type.make_member_of(module, self, field_type, field_name, visible, True, False)
+                # Add the field to ourselves.
+                type.make_member_of(module, self, field_type, field_name, True, True, False)
 
-                # recursively resolve the type (could be another structure, list)
+                # Recursively resolve the type (could be another structure, list).
                 type.resolve(module)
                 inserted = False
                 for new_field in type.fields:
@@ -413,10 +411,9 @@ class SwitchType(ComplexType):
                             self.fields[idx] = new_field
                             inserted = True
                             break
-                    if False == inserted:
+                    if not inserted:
                         self.fields.append(new_field)
 
-        self.calc_size() # Figure out how big we are
         self.resolved = True
 
     def make_member_of(self, module, complex_type, field_type, field_name, visible, wire, auto, enum=None):
@@ -434,7 +431,7 @@ class SwitchType(ComplexType):
                     if field.field_name == lenfield_name:
                         needlen = False
 
-            # It isn't, so we need to add it to the structure ourself.
+            # It isn't, so we need to add it to the structure ourselves.
             if needlen:
                 type = module.get_type(lenfid)
                 lenfield_type = module.get_type_name(lenfid)
@@ -443,18 +440,8 @@ class SwitchType(ComplexType):
         # Add ourself to the structure by calling our original method.
         Type.make_member_of(self, module, complex_type, field_type, field_name, visible, wire, auto, enum)
 
-    # size for switch can only be calculated at runtime
-    def calc_size(self):
-        pass
-
-    # note: switch is _always_ of variable size, but we indicate here wether 
-    # it contains elements that are variable-sized themselves
     def fixed_size(self):
         return False
-#        for m in self.fields:
-#            if not m.type.fixed_size():
-#                return False
-#        return True
 
 
 class Struct(ComplexType):
