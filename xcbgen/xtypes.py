@@ -193,7 +193,8 @@ class ListType(Type):
             if needlen:
                 type = module.get_type(lenfid)
                 lenfield_type = module.get_type_name(lenfid)
-                type.make_member_of(module, complex_type, lenfield_type, lenfield_name, True, lenwire, False, enum)
+                type.make_member_of(module, complex_type, lenfield_type, lenfield_name,
+                                    visible=True, wire=lenwire, auto=False, enum=enum)
 
         # Add ourself to the structure by calling our original method.
         Type.make_member_of(self, module, complex_type, field_type, field_name, visible, wire, auto, enum)
@@ -319,7 +320,8 @@ class ComplexType(Type):
                 field_type = self.name + (field_name,)
                 type = SwitchType(field_type, child, *self.lenfield_parent)
                 visible = True
-                type.make_member_of(module, self, field_type, field_name, visible, True, False)
+                type.make_member_of(module, self, field_type, field_name,
+                                    visible, wire=True, auto=False)
                 type.resolve(module)
                 continue
             else:
@@ -329,7 +331,8 @@ class ComplexType(Type):
             # Get the full type name for the field
             field_type = module.get_type_name(fkey)
             # Add the field to ourself
-            type.make_member_of(module, self, field_type, field_name, visible, True, False, enum)
+            type.make_member_of(module, self, field_type, field_name,
+                                visible, wire=True, auto=False, enum=enum)
             # Recursively resolve the type (could be another structure, list)
             type.resolve(module)
 
@@ -399,7 +402,8 @@ class SwitchType(ComplexType):
                     field_type = type.name
 
                 # Add the field to ourselves.
-                type.make_member_of(module, self, field_type, field_name, True, True, False)
+                type.make_member_of(module, self, field_type, field_name,
+                                    visible=True, wire=True, auto=False)
 
                 # Recursively resolve the type (could be another structure, list).
                 type.resolve(module)
@@ -435,7 +439,8 @@ class SwitchType(ComplexType):
             if needlen:
                 type = module.get_type(lenfid)
                 lenfield_type = module.get_type_name(lenfid)
-                type.make_member_of(module, complex_type, lenfield_type, lenfield_name, True, lenwire, False, enum)
+                type.make_member_of(module, complex_type, lenfield_type, lenfield_name,
+                                    visible=True, wire=lenwire, auto=False, enum=enum)
 
         # Add ourself to the structure by calling our original method.
         Type.make_member_of(self, module, complex_type, field_type, field_name, visible, wire, auto, enum)
