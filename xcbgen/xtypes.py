@@ -496,13 +496,6 @@ class BitcaseType(ComplexType):
         see Field for the meaning of the other parameters.
         '''
         new_field = Field(self, field_type, field_name, visible, wire, auto, enum)
-
-        # We dump the _placeholder_byte if any bitcases are added.
-        for (idx, field) in enumerate(switch_type.bitcases):
-            if field == _placeholder_byte:
-                switch_type.bitcases[idx] = new_field
-                return
-
         switch_type.bitcases.append(new_field)
 
     def resolve(self, module):
