@@ -32,9 +32,9 @@ class Namespace(object):
         self.root = parse(filename).getroot()
         self.header = self.root.get('header')
         self.ns = self.header + ':'
-        
+
         # Get root element attributes
-        if self.root.get('extension-xname', False): 
+        if self.root.get('extension-xname', False):
             self.is_ext = True
             self.major_version = self.root.get('major-version')
             self.minor_version = self.root.get('minor-version')

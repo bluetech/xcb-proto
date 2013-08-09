@@ -262,7 +262,7 @@ class PadType(Type):
     def fixed_size(self):
         return True
 
-    
+
 class ComplexType(Type):
     '''
     Derived class which represents a structure.  Base type for all structure types.
@@ -326,7 +326,7 @@ class ComplexType(Type):
                 continue
             else:
                 # Hit this on Reply
-                continue 
+                continue
 
             # Get the full type name for the field
             field_type = module.get_type_name(fkey)
@@ -358,7 +358,7 @@ class ComplexType(Type):
 
 class SwitchType(ComplexType):
     '''
-    Derived class which represents a List of Items.  
+    Derived class which represents a List of Items.
 
     Public fields added:
     bitcases is an array of Bitcase objects describing the list items
@@ -538,7 +538,7 @@ class Reply(ComplexType):
         self.fields.append(Field(tcard16, tcard16.name, 'sequence', False, True, True))
         self.fields.append(Field(tcard32, tcard32.name, 'length', False, True, True))
         ComplexType.resolve(self, module)
-        
+
 
 class Request(ComplexType):
     '''

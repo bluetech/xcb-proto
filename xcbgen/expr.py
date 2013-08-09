@@ -84,7 +84,7 @@ class Expression(object):
             self.rhs = Expression(list(elt)[0], parent)
 
             self.lenfield_name = self.rhs.lenfield_name
-            
+
         elif elt.tag == 'value':
             # Constant expression
             self.nmemb = int(elt.text, 0)
@@ -98,7 +98,7 @@ class Expression(object):
         elif elt.tag == 'enumref':
             self.op = 'enumref'
             self.lenfield_name = (elt.get('ref'), elt.text)
-            
+
         elif elt.tag == 'sumof':
             self.op = 'sumof'
             self.lenfield_name = elt.get('ref')
@@ -120,10 +120,9 @@ class Expression(object):
                 fields = dict([(f.field_name, f) for f in p.fields])
                 if self.lenfield_name in fields.keys():
                     if p.is_bitcase:
-                        # switch is the anchestor 
+                        # switch is the ancestor
                         self.lenfield_parent = p.parents[-1]
                     else:
                         self.lenfield_parent = p
                     self.lenfield_type = fields[self.lenfield_name].field_type
                     break
-                    
