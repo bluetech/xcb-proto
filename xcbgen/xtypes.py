@@ -407,16 +407,9 @@ class SwitchType(ComplexType):
 
                 # Recursively resolve the type (could be another structure, list).
                 type.resolve(module)
-                inserted = False
+
                 for new_field in type.fields:
-                    # We dump the _placeholder_byte if any fields are added.
-                    for (idx, field) in enumerate(self.fields):
-                        if field == _placeholder_byte:
-                            self.fields[idx] = new_field
-                            inserted = True
-                            break
-                    if not inserted:
-                        self.fields.append(new_field)
+                    self.fields.append(new_field)
 
         self.resolved = True
 
