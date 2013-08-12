@@ -120,8 +120,6 @@ authorization from the authors.
 		<item name="IgnoreGroupLockMask">  <bit>12</bit> </item>
 	</enum>
 
-	<!-- XXX: one zero less than XKB specification says,
-	          uses the same values as libX11 -->
 	<enum name="Control" >
 		<item name="GroupsWrap">      <bit>27</bit> </item>
 		<item name="InternalMods">    <bit>28</bit> </item>
